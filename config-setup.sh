@@ -1,34 +1,42 @@
 #!/usr/bin/with-contenv bash
 # This script runs during s6 initialization phase
 
-echo "Setting up Heimdall for Home Assistant addon..."
+echo "=== Heimdall HA Addon Setup Debug ==="
 
-# Create the persistent config directory if it doesn't exist
-mkdir -p /data/heimdall-config
+# Debug: Show what directories exist
+echo "Current /data contents:"
+ls -la /data/ || echo "/data not found"
 
-# Check if this is first run or if we need to migrate existing config
-if [ ! -d "/data/heimdall-config/www" ] && [ -d "/config/www" ]; then
-    echo "Migrating existing config to persistent storage..."
-    cp -r /config/* /data/heimdall-config/ 2>/dev/null || true
-fi
+echo "Current /config contents before setup:"
+ls -la /config/ || echo "/config not found"
 
-# Remove the original config directory and create a symlink to persistent storage
-rm -rf /config
-ln -sf /data/heimdall-config /config
-
-# Ensure proper ownership for the abc user (used by LinuxServer.io images)
-chown -R abc:abc /data/heimdall-config
-
-# Force Heimdall to bind to all interfaces (not just localhost)
-export HEIMDALL_HOST=0.0.0.0
-
-# Source bashio if available for future configuration options
-if command -v bashio &> /dev/null; then
-    echo "Bashio available for configuration parsing"
-    # Future: Parse Home Assistant addon configuration here
-    # CUSTOM_SETTING=$(bashio::config 'custom_setting')
+# Check if we have persistent storage mapped
+if [ -d "/data" ]; then
+    echo "✓ Persistent storage available at /data"
+    
+    # Create heimdall config directory in persistent storage
+    mkdir -p /data/heimdall
+    echo "✓ Created /data/heimdall"
+    
+    # Set ownership
+    chown -R abc:abc /data/heimdall
+    echo "✓ Set ownership on /data/heimdall"
+    
+    # Check if config already exists in persistent storage
+    if [ -f "/data/heimdall/.env" ]; then
+        echo "✓ Found existing Heimdall config in persistent storage"
+    else
+        echo "! No existing config found in persistent storage"
+    fi
+    
 else
-    echo "Using default configuration"
+    echo "✗ No persistent storage found - data will not persist!"
 fi
 
-echo "Configuration setup complete - data will persist in /data/heimdall-config"
+# Debug: Check environment variables that might affect Heimdall
+echo "Environment check:"
+echo "PWD: $PWD"
+echo "USER: $USER"
+echo "HOME: $HOME"
+
+echo "=== End Debug Info ==="
