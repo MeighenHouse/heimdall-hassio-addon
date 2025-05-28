@@ -13,6 +13,7 @@ init: false
 map:
   - share:rw
   - ssl:ro
+  - config:rw
 options:
   http_port: 80
   https_port: 443
