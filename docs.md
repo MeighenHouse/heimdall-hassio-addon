@@ -7,7 +7,7 @@ Heimdall is an elegant solution to organize all your web applications. It's dedi
 Follow these steps to get the add-on installed on your system:
 
 1. Navigate in your Home Assistant frontend to **Supervisor** → **Add-on Store**.
-2. Add the repository URL: `https://github.com/yourusername/heimdall-hassio-addon`
+2. Add the repository URL: `https://github.com/MeighenHouse/heimdall-hassio-addon`
 3. Find the "Heimdall" add-on and click it.
 4. Click on the "INSTALL" button.
 
