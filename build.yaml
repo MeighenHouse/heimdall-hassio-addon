@@ -7,7 +7,7 @@ build_from:
 labels:
   org.opencontainers.image.title: "Heimdall"
   org.opencontainers.image.description: "An Application Dashboard and Launcher"
-  org.opencontainers.image.source: "https://github.com/yourusername/heimdall-hassio-addon"
+  org.opencontainers.image.source: "https://github.com/MeighenHouse/heimdall-hassio-addon"
   org.opencontainers.image.licenses: "MIT"
 args:
   HEIMDALL_VERSION: "2.6.1"
