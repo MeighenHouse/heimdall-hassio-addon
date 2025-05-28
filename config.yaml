@@ -2,7 +2,7 @@ name: Heimdall
 version: 2.6.1
 slug: heimdall
 description: An Application Dashboard and Launcher
-url: https://github.com/yourusername/heimdall-hassio-addon
+url: https://github.com/MeighenHouse/heimdall-hassio-addon
 arch:
   - armhf
   - armv7
