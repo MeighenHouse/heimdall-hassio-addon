@@ -11,6 +11,7 @@ arch:
   - i386
 startup: services
 boot: auto
+init: false
 ingress: true
 ingress_port: 80
 # Optional: still expose ports for direct access
