@@ -8,7 +8,7 @@ echo "Setting up Heimdall for Home Assistant addon..."
 # The base image's init scripts (running before this one) usually handle PUID/PGID
 # which should set ownership correctly. However, an explicit chown can be a safeguard
 # or if PUID/PGID aren't being effectively used/set in the HA environment for this user.
-chown -R abc:abc /config
+# chown -R abc:abc /config
 
 # (Optional) Set Heimdall to bind to all interfaces if not default in base image
 # Most LinuxServer.io web services bind to 0.0.0.0 by default in their nginx/webserver configs.
