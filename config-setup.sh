@@ -1,28 +1,34 @@
 #!/usr/bin/with-contenv bash
 # This script runs during s6 initialization phase
 
-# Source bashio if available
-if command -v bashio &> /dev/null; then
-    # Parse Home Assistant addon configuration here
-    echo "Setting up Heimdall with Home Assistant configuration..."
+echo "Setting up Heimdall for Home Assistant addon..."
 
-    echo "Setting up Heimdall for Home Assistant addon..."
+# Create the persistent config directory if it doesn't exist
+mkdir -p /data/heimdall-config
 
-    # Force Heimdall to bind to all interfaces (not just localhost)
-    # LinuxServer.io images sometimes default to localhost only
-    export HEIMDALL_HOST=0.0.0.0
-    
-    # Ensure proper permissions for web directory
-    chown -R abc:abc /config
-    
-    # Example: Read configuration options
-    # CUSTOM_SETTING=$(bashio::config 'custom_setting')
-    # export CUSTOM_SETTING
-    
-    # You can set environment variables here that Heimdall will use
-    # Or modify configuration files before Heimdall starts
-    
-    echo "Configuration setup complete"
-else
-    echo "Bashio not available, using default configuration"
+# Check if this is first run or if we need to migrate existing config
+if [ ! -d "/data/heimdall-config/www" ] && [ -d "/config/www" ]; then
+    echo "Migrating existing config to persistent storage..."
+    cp -r /config/* /data/heimdall-config/ 2>/dev/null || true
 fi
+
+# Remove the original config directory and create a symlink to persistent storage
+rm -rf /config
+ln -sf /data/heimdall-config /config
+
+# Ensure proper ownership for the abc user (used by LinuxServer.io images)
+chown -R abc:abc /data/heimdall-config
+
+# Force Heimdall to bind to all interfaces (not just localhost)
+export HEIMDALL_HOST=0.0.0.0
+
+# Source bashio if available for future configuration options
+if command -v bashio &> /dev/null; then
+    echo "Bashio available for configuration parsing"
+    # Future: Parse Home Assistant addon configuration here
+    # CUSTOM_SETTING=$(bashio::config 'custom_setting')
+else
+    echo "Using default configuration"
+fi
+
+echo "Configuration setup complete - data will persist in /data/heimdall-config"
