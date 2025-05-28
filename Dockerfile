@@ -13,9 +13,9 @@ RUN curl -J -L -s -o /tmp/bashio.tar.gz \
     && ln -s /usr/lib/bashio/bashio /usr/bin/bashio \
     && rm -rf /tmp/bashio*
 
-# Copy our simple startup script
-COPY run.sh /run.sh
-RUN chmod +x /run.sh
+# Copy our configuration script to run during s6 init
+COPY config-setup.sh /etc/cont-init.d/99-ha-config
+RUN chmod +x /etc/cont-init.d/99-ha-config
 
-# Use our script as entrypoint but preserve LinuxServer.io's init system
-ENTRYPOINT ["/run.sh"]
+# Don't override the entrypoint - let LinuxServer.io's s6 handle it
+# The original entrypoint is: ["/init"]
