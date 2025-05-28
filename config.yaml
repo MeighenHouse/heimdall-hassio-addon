@@ -1,34 +1,30 @@
 name: Heimdall
-version: 2.6.1
+version: "2.6.1"
 slug: heimdall
 description: An Application Dashboard and Launcher
-url: https://github.com/MeighenHouse/heimdall-hassio-addon
+url: https://github.com/yourusername/heimdall-hassio-addon
 arch:
   - armhf
   - armv7
   - aarch64
   - amd64
   - i386
+image: lscr.io/linuxserver/heimdall:latest
 init: false
 map:
   - share:rw
   - ssl:ro
-  - config:rw
 options:
-  http_port: 80
-  https_port: 443
-  ssl: false
-  certfile: fullchain.pem
-  keyfile: privkey.pem
+  PUID: 99
+  PGID: 100
+  TZ: UTC
 schema:
-  http_port: int(1,65535)
-  https_port: int(1,65535)
-  ssl: bool
-  certfile: str
-  keyfile: str
+  PUID: int(1,65534)
+  PGID: int(1,65534)
+  TZ: str
 ports:
-  80/tcp: null
-  443/tcp: null
+  80/tcp: 7880
+  443/tcp: 7443
 ports_description:
   80/tcp: HTTP port for Heimdall
   443/tcp: HTTPS port for Heimdall (SSL only)
@@ -40,8 +36,12 @@ hassio_api: false
 hassio_role: default
 homeassistant_api: false
 host_network: false
-privileged:
-  - NET_ADMIN
+privileged: []
 full_access: false
 apparmor: true
 devicetree: false
+environment:
+  PUID: "99"
+  PGID: "100"
+  TZ: "UTC"
+tmpfs: false
